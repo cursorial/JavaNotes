@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
@@ -39,48 +40,35 @@ public class Tone {
 	static final int timeSigEvent[] = new int[]{0x00, 0xFF, 0x58, 0x04,
 												0x04, 0x02, 0x30, 0x08};
 
-	protected Vector<int[]> playEvents;
+	protected List<int[]> playEvents;
 
 	public Tone(){
 
-		playEvents = new Vector<>();
+		playEvents = new ArrayList<>();
 
 	}
 
 	public void writeToFile(String fileName) throws IOException{
-
 		FileOutputStream fos = new FileOutputStream(fileName);
-
 		fos.write(intArrayToByteArray(header));
-
 		int size = tempoEvent.length + keySigEvent.length + timeSigEvent.length + footer.length;
-
 		for(int i = 0; i < playEvents.size(); i++){
-
-			size += playEvents.elementAt(i).length;
-
+			size += playEvents.get(i).length;
 		}
-
 		int high = size / 256;
 		int low = size - high * 256;
 		fos.write((byte) 0);
 		fos.write((byte) 0);
 		fos.write((byte) high);
 		fos.write((byte) low);
-
 		fos.write(intArrayToByteArray (tempoEvent));
 		fos.write(intArrayToByteArray (keySigEvent));
 		fos.write(intArrayToByteArray (timeSigEvent));
-
 		for(int i = 0; i < playEvents.size(); i++){
-
-			fos.write(intArrayToByteArray (playEvents.elementAt(i)));
-
+			fos.write(intArrayToByteArray (playEvents.get(i)));
 		}
-
 		fos.write(intArrayToByteArray (footer));
 		fos.close();
-
 	}
 
 	public void play(String fileName) throws MalformedURLException, IOException, MidiUnavailableException, InvalidMidiDataException{
