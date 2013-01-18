@@ -44,7 +44,6 @@ public final class TuneParser {
 	}
 
 	public int decodeDuration(String duration){
-		int decode = 0;
 		switch(duration){
 			case "D":
 				return 2;
@@ -59,7 +58,7 @@ public final class TuneParser {
 			case "B":
 				return 64;
 		}
-		return decode;
+		return 0; // FIXME This type of thing should really be replaced with exception or something
 	}
 
 }
