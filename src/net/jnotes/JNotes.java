@@ -18,7 +18,7 @@ public class JNotes{
 		TuneParser tp = new TuneParser();
 		Scanner sc = new Scanner(new File("tune.txt"));
 		t.progChange(sc.nextInt());
-		for(int i = 1; i < lnr.getLineNumber(); i++){
+		for(int i = 1; i <= lnr.getLineNumber(); i++){
 
 			String note = sc.nextLine();
 			

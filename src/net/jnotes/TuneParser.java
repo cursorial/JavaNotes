@@ -24,7 +24,7 @@ public class TuneParser {
 		sharpnessMap.put("b",0);
 	}
 	
-	public static int decodeNote(String note){	
+	public int decodeNote(String note){	
 		note = note.toLowerCase();
 		Pattern pattern = Pattern.compile("([cdefgab])(\\d{1,2})([dsqcmb])([+-])");
 		Matcher matcher = pattern.matcher(note);
