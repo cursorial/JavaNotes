@@ -3,7 +3,6 @@ package net.jnotes;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +68,7 @@ public final class Tone {
 		}
 	}
 
-	public void play(String fileName) throws MalformedURLException, IOException, MidiUnavailableException, InvalidMidiDataException{
+	public void play(String fileName) throws IOException, MidiUnavailableException, InvalidMidiDataException{
 		Sequence s = MidiSystem.getSequence(new File(fileName));
 		Sequencer sr = MidiSystem.getSequencer();
 		sr.open();
