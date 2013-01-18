@@ -23,22 +23,22 @@ public final class Tone {
 	static final int MINIM = 32;
 	static final int SEMIBREVE = 64;
 
-	static final int header[] = new int[]{0x4d, 0x54, 0x68, 0x64,
+	static final byte header[] = new byte[]{0x4d, 0x54, 0x68, 0x64,
 										  0x00, 0x00, 0x00, 0x06,
 										  0x00, 0x00, 0x00, 0x01,
 										  0x00, 0x10, 0x4d, 0x54,
 										  0x72, 0x6B};
 
-	static final int footer[] = new int[]{0x01, 0xFF, 0x2F, 0x00};
+	static final byte footer[] = intsToBytes(new int[]{0x01, 0xFF, 0x2F, 0x00});
 
-	static final int tempoEvent[] = new int[]{0x00, 0xFF, 0x51, 0x03,
-											  0x0F, 0x42, 0x40};
+	static final byte tempoEvent[] = intsToBytes(new int[]{0x00, 0xFF, 0x51, 0x03,
+											  0x0F, 0x42, 0x40});
 
-	static final int keySigEvent[] = new int[]{0x00, 0xFF, 0x59, 0x02,
-											   0x00, 0x00};
+	static final byte keySigEvent[] = intsToBytes(new int[]{0x00, 0xFF, 0x59, 0x02,
+											   0x00, 0x00});
 
-	static final int timeSigEvent[] = new int[]{0x00, 0xFF, 0x58, 0x04,
-												0x04, 0x02, 0x30, 0x08};
+	static final byte timeSigEvent[] = intsToBytes(new int[]{0x00, 0xFF, 0x58, 0x04,
+												0x04, 0x02, 0x30, 0x08});
 
 	private final List<int[]> playEvents;
 
@@ -48,7 +48,7 @@ public final class Tone {
 
 	public void writeToFile(String fileName) throws IOException{
 		FileOutputStream fos = new FileOutputStream(fileName);
-		fos.write(intArrayToByteArray(header));
+		fos.write(header);
 		int size = tempoEvent.length + keySigEvent.length + timeSigEvent.length + footer.length;
 		for(int i = 0; i < playEvents.size(); i++){
 			size += playEvents.get(i).length;
@@ -59,13 +59,13 @@ public final class Tone {
 		fos.write((byte) 0);
 		fos.write((byte) high);
 		fos.write((byte) low);
-		fos.write(intArrayToByteArray (tempoEvent));
-		fos.write(intArrayToByteArray (keySigEvent));
-		fos.write(intArrayToByteArray (timeSigEvent));
+		fos.write(tempoEvent);
+		fos.write(keySigEvent);
+		fos.write(timeSigEvent);
 		for(int i = 0; i < playEvents.size(); i++){
-			fos.write(intArrayToByteArray (playEvents.get(i)));
+			fos.write(intsToBytes (playEvents.get(i)));
 		}
-		fos.write(intArrayToByteArray (footer));
+		fos.write(footer);
 		fos.close();
 	}
 
@@ -80,15 +80,6 @@ public final class Tone {
 			catch (InterruptedException e){}
 		}
 		sr.stop();
-	}
-
-	protected static byte[] intArrayToByteArray(int[] ints){
-		int l = ints.length;
-		byte[] out = new byte[ints.length];
-		for(int i = 0; i < l; i++) {
-			out[i] = (byte) ints[i];
-		}
-		return out;
 	}
 
 	public void noteOn(int delta, int note, int velocity){
@@ -132,6 +123,15 @@ public final class Tone {
 				lastWasRest = false;
 			}
 		}
+	}
+
+	private static byte[] intsToBytes(int[] ints){
+		int l = ints.length;
+		byte[] out = new byte[ints.length];
+		for(int i = 0; i < l; i++) {
+			out[i] = (byte) ints[i];
+		}
+		return out;
 	}
 
 }
