@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 public final class TuneParser {
 
+	private static final Pattern pattern = Pattern.compile("([cdefgab])(\\d{1,2})([dsqcmb])([+-])");
 	private static final Map<String, Integer> noteMap = new HashMap<>();
 	private static final Map<String, Integer> sharpnessMap = new HashMap<>();
 	static {
@@ -30,7 +31,6 @@ public final class TuneParser {
 
 	public int decodeNote(String note){
 		note = note.toLowerCase(Locale.ENGLISH);
-		Pattern pattern = Pattern.compile("([cdefgab])(\\d{1,2})([dsqcmb])([+-])");
 		Matcher matcher = pattern.matcher(note);
 		if(matcher.matches()) {
 			String baseNote = matcher.group(1);
