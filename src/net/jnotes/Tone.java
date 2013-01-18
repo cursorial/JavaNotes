@@ -68,17 +68,21 @@ public final class Tone {
 		}
 	}
 
-	public void play(String fileName) throws IOException, MidiUnavailableException, InvalidMidiDataException{
+	public void play(String fileName) throws IOException, MidiUnavailableException, InvalidMidiDataException {
 		Sequence s = MidiSystem.getSequence(new File(fileName));
-		Sequencer sr = MidiSystem.getSequencer();
-		sr.open();
-		sr.setSequence(s);
-		sr.start();
-		while(sr.isRunning()){
-			try{Thread.sleep(1000);}
-			catch (InterruptedException e){}
+		try (Sequencer sr = MidiSystem.getSequencer();) {
+			sr.open();
+			sr.setSequence(s);
+			sr.start();
+			while (sr.isRunning()) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// don't care.
+				}
+			}
+			sr.stop(); // Is this equivalent to close()?
 		}
-		sr.stop();
 	}
 
 	public void noteOn(int delta, int note, int velocity){
