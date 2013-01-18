@@ -6,9 +6,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class TuneParser {
+
 	private static final Map<String, Integer> noteMap = new HashMap<>();
 	private static final Map<String, Integer> sharpnessMap = new HashMap<>();
-	public TuneParser() {
+	static {
 		noteMap.put("c", 0);
 		noteMap.put("d", 2);
 		noteMap.put("e", 4);
