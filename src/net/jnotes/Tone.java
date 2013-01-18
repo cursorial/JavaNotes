@@ -125,12 +125,11 @@ public final class Tone {
 		}
 	}
 
-	private static byte[] intsToBytes(int[] ints){
-		int l = ints.length;
+	private static byte[] intsToBytes(int[] ints) {
+		final int l = ints.length;
 		byte[] out = new byte[ints.length];
-		for(int i = 0; i < l; i++) {
+		for (int i = 0; i < l; i++)
 			out[i] = (byte) ints[i];
-		}
 		return out;
 	}
 
