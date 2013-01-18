@@ -15,7 +15,7 @@ import javax.sound.midi.Sequencer;
 
 //credit to Kevin Boone for this class
 //http://kevinboone.net/javamidi.html
-public class Tone {
+public final class Tone {
 
 	static final int SEMIQUAVER = 4;
 	static final int QUAVER = 8;
@@ -40,12 +40,10 @@ public class Tone {
 	static final int timeSigEvent[] = new int[]{0x00, 0xFF, 0x58, 0x04,
 												0x04, 0x02, 0x30, 0x08};
 
-	protected List<int[]> playEvents;
+	private final List<int[]> playEvents;
 
 	public Tone(){
-
 		playEvents = new ArrayList<>();
-
 	}
 
 	public void writeToFile(String fileName) throws IOException{
