@@ -58,6 +58,7 @@ public final class Tone {
 			fos.write((byte) 0);
 			fos.write((byte) high);
 			fos.write((byte) low);
+			// XXX Above is size in bytes - endian fuckery? Better way to do it. Casting unnecessary.
 			fos.write(tempoEvent);
 			fos.write(keySigEvent);
 			fos.write(timeSigEvent);
