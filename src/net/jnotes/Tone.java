@@ -46,27 +46,27 @@ public final class Tone {
 		playEvents = new ArrayList<>();
 	}
 
-	public void writeToFile(String fileName) throws IOException{
-		FileOutputStream fos = new FileOutputStream(fileName);
-		fos.write(header);
-		int size = tempoEvent.length + keySigEvent.length + timeSigEvent.length + footer.length;
-		for(int i = 0; i < playEvents.size(); i++){
-			size += playEvents.get(i).length;
+	public void writeToFile(String fileName) throws IOException {
+		try (FileOutputStream fos = new FileOutputStream(fileName);) {
+			fos.write(header);
+			int size = tempoEvent.length + keySigEvent.length + timeSigEvent.length + footer.length;
+			for (int i = 0; i < playEvents.size(); i++) {
+				size += playEvents.get(i).length;
+			}
+			int high = size / 256;
+			int low = size - high * 256;
+			fos.write((byte) 0);
+			fos.write((byte) 0);
+			fos.write((byte) high);
+			fos.write((byte) low);
+			fos.write(tempoEvent);
+			fos.write(keySigEvent);
+			fos.write(timeSigEvent);
+			for (int i = 0; i < playEvents.size(); i++) {
+				fos.write(intsToBytes(playEvents.get(i)));
+			}
+			fos.write(footer);
 		}
-		int high = size / 256;
-		int low = size - high * 256;
-		fos.write((byte) 0);
-		fos.write((byte) 0);
-		fos.write((byte) high);
-		fos.write((byte) low);
-		fos.write(tempoEvent);
-		fos.write(keySigEvent);
-		fos.write(timeSigEvent);
-		for(int i = 0; i < playEvents.size(); i++){
-			fos.write(intsToBytes (playEvents.get(i)));
-		}
-		fos.write(footer);
-		fos.close();
 	}
 
 	public void play(String fileName) throws MalformedURLException, IOException, MidiUnavailableException, InvalidMidiDataException{
