@@ -43,7 +43,7 @@ public class Tone {
 	
 	public Tone(){
 		
-		playEvents = new Vector<int[]>();
+		playEvents = new Vector<>();
 		
 	}
 	
@@ -103,91 +103,55 @@ public class Tone {
 	}
 	
 	protected static byte[] intArrayToByteArray(int[] ints){
-		
 		int l = ints.length;
 		byte[] out = new byte[ints.length];
-		for(int i = 0; i < l; i++){
-			
+		for(int i = 0; i < l; i++) {
 			out[i] = (byte) ints[i];
-			
 		}
 		return out;
-		
 	}
 	
 	public void noteOn(int delta, int note, int velocity){
-		
-		int[] data = new int[4];
-		data[0] = delta;
-		data[1] = 0x90;
-		data[2] = note;
-		data[3] = velocity;
+		int[] data = { delta, 0x90, note, velocity };
 		playEvents.add(data);
-		
 	}
 	
 	public void noteOff(int delta, int note){
-		
-		int[] data = new int[4];
-		data[0] = delta;
-		data[1] = 0x80;
-		data[2] = note;
-		data[3] = 0;
+		int[] data = { delta, 0x80, note, 0 };
 		playEvents.add(data);
-		
 	}
 	
 	public void progChange(int prog){
-		
-		int[] data = new int[3];
-		data[0] = 0;
-		data[1] = 0xC0;
-		data[2] = prog;
+		int[] data = { 0, 0xC0, prog };
 		playEvents.add(data);
-		
 	}
 	
 	public void noteOnOffNow(int duration, int note, int velocity){
-		
 		noteOn(0, note, velocity);
 		noteOff(duration, note);
-		
 	}
 	
 	public void noteSequenceFixedVelocity(int[] sequence, int velocity){
-		
 		boolean lastWasRest = false;
 		int restDelta = 0;
 		for(int i = 0; i < sequence.length; i += 2){
-			
 			int note = sequence[i];
 			int duration = sequence[i + 1];
 			if(note < 0){
-				
 				restDelta += duration;
 				lastWasRest = true;
-				
 			} else {
-				
 				if(lastWasRest){
-					
 					noteOn(restDelta, note, velocity);
 					noteOff(duration, note);
-					
 				} else {
-					
 					noteOn(0, note, velocity);
 					noteOff(duration, note);
-					
 				}
-				
 				restDelta = 0;
 				lastWasRest = false;
-				
 			}
-			
 		}
-		
 	}
-	
+
 }
